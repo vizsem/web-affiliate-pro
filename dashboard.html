@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard AffiliatePro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css"> <style>
+        /* CSS Khusus Dashboard */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+        .sidebar {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 1rem;
+        }
+        .sidebar-menu {
+            list-style: none;
+            margin-top: 2rem;
+        }
+        .sidebar-menu li {
+            padding: 1rem;
+            border-radius: 8px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .sidebar-menu li.active, .sidebar-menu li:hover {
+            background: var(--primary);
+        }
+        .main-content {
+            padding: 2rem;
+            background: #f1f5f9;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .product-img {
+            width: 100%;
+            height: 180px;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-info {
+            padding: 1.2rem;
+        }
+        .commission-badge {
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo"><i class="fas fa-chart-line"></i> AffiliatePro</div>
+            <ul class="sidebar-menu">
+                <li class="active"><i class="fas fa-home"></i> Dashboard</li>
+                <li><i class="fas fa-box"></i> Katalog Produk</li>
+                <li><i class="fas fa-wallet"></i> Komisi</li>
+                <li><i class="fas fa-cog"></i> Pengaturan</li>
+                <li style="margin-top: auto;"><a href="index.html" style="color: white; text-decoration: none;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <header style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>Katalog Produk Afiliasi</h2>
+                <div class="user-profile">Halo, <strong>Affiliate Marketer</strong></div>
+            </header>
+
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-img"><i class="fas fa-mobile-alt fa-3x"></i></div>
+                    <div class="product-info">
+                        <span class="commission-badge">Komisi 15%</span>
+                        <h4 style="margin: 10px 0;">Smartphone Pro Max X</h4>
+                        <p style="font-size: 0.9rem; color: #64748b;">Shopee • Stok: 50+</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="generateLink()">Ambil Link</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img"><i class="fas fa-laptop fa-3x"></i></div>
+                    <div class="product-info">
+                        <span class="commission-badge">Komisi 10%</span>
+                        <h4 style="margin: 10px 0;">Laptop Ultrabook Ultra</h4>
+                        <p style="font-size: 0.9rem; color: #64748b;">Tokopedia • Stok: 20+</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="generateLink()">Ambil Link</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img"><i class="fas fa-headphones fa-3x"></i></div>
+                    <div class="product-info">
+                        <span class="commission-badge">Komisi 20%</span>
+                        <h4 style="margin: 10px 0;">Wireless Headphone Giga</h4>
+                        <p style="font-size: 0.9rem; color: #64748b;">TikTok Shop • Stok: 100+</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="generateLink()">Ambil Link</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
