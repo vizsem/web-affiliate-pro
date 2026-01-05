@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AffiliatePro - Solusi Afiliasi Terpadu</title>
@@ -15,14 +14,18 @@
                 <i class="fas fa-chart-line"></i>
                 <span>AffiliatePro</span>
             </div>
+            <div class="mobile-menu-btn" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
             <ul class="nav-links">
                 <li><a href="#how">Cara Kerja</a></li>
                 <li><a href="#platforms">Platform</a></li>
                 <li><a href="#features">Fitur</a></li>
+                <li><a href="#contact">Bantuan</a></li>
             </ul>
             <div class="nav-btns">
-                <a href="#" class="btn btn-outline">Login</a>
-                <a href="#" class="btn btn-primary">Daftar</a>
+                <a href="dashboard.html" class="btn btn-outline">Login</a>
+                <a href="dashboard.html" class="btn btn-primary">Daftar</a>
             </div>
         </nav>
     </header>
@@ -33,132 +36,189 @@
                 <h1>Satu Link, Ribuan Peluang Cuan</h1>
                 <p>Kelola semua link afiliasi Shopee, Tokopedia, hingga TikTok Shop dalam satu dashboard cerdas.</p>
                 <div class="hero-btns">
-                    <a href="#" class="btn btn-primary btn-lg">Mulai Sekarang</a>
-                    <a href="dashboard.html" class="btn btn-primary">Lihat Demo</a>
+                    <a href="dashboard.html" class="btn btn-primary btn-lg">Mulai Sekarang</a>
+                    <a href="dashboard.html" class="btn btn-white btn-lg">Lihat Demo</a>
                 </div>
             </div>
         </section>
+
         <section id="generator" class="generator">
-    <div class="container">
-        <div class="generator-card">
-            <h2><i class="fas fa-magic"></i> Magic Link Generator</h2>
-            <p>Masukkan link produk (Shopee/TikTok) dan dapatkan link afiliasi Anda secara instan.</p>
-            
-            <div class="input-group">
-                <input type="text" id="raw-link" placeholder="Tempel link produk di sini...">
-                <button onclick="generateLink()" class="btn btn-primary">Generate</button>
+            <div class="container">
+                <div class="generator-card">
+                    <h2><i class="fas fa-magic"></i> Magic Link Generator</h2>
+                    <p>Masukkan link produk (Shopee/TikTok) dan dapatkan link afiliasi Anda secara instan.</p>
+                    <div class="input-group">
+                        <input type="text" id="raw-link" placeholder="Tempel link produk di sini...">
+                        <button onclick="generateLink()" class="btn btn-primary">Generate</button>
+                    </div>
+                    <div id="result-container" class="result-container" style="display: none;">
+                        <p>Link Afiliasi Anda:</p>
+                        <div class="copy-area">
+                            <input type="text" id="generated-url" readonly>
+                            <button onclick="copyLink()" class="btn btn-secondary">Salin</button>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <div id="result-container" class="result-container" style="display: none;">
-                <p>Link Afiliasi Anda:</p>
-                <div class="copy-area">
-                    <input type="text" id="generated-url" readonly>
-                    <button onclick="copyLink()" class="btn btn-secondary">Salin</button>
+        <section id="how" class="how-it-works">
+            <div class="container">
+                <h2 class="section-title">Mulai Hasilkan Uang dalam 3 Langkah</h2>
+                <div class="step-grid">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <h3>Daftar & Hubungkan</h3>
+                        <p>Buat akun gratis dan hubungkan akun media sosial atau toko marketplace Anda dalam satu menit.</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <h3>Pilih & Promosikan</h3>
+                        <p>Gunakan <strong>Magic Link Generator</strong> untuk mengambil link produk pilihan dan bagikan ke audiens Anda.</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <h3>Tarik Komisi</h3>
+                        <p>Pantau penjualan secara real-time dan tarik penghasilan langsung ke rekening bank atau e-wallet Anda.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-<section id="testimonials" class="testimonials">
-    <div class="container">
-        <h2 class="section-title">Apa Kata Mereka?</h2>
-        <div class="testimonial-grid">
-            <div class="testimonial-card">
-                <div class="stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-                <p>"Sangat terbantu! Dulu pusing kelola link Shopee dan TikTok satu-satu, sekarang semua rapi dalam satu dashboard."</p>
-                <div class="user">
-                    <strong>Andi Pratama</strong>
-                    <span>Content Creator</span>
-                </div>
-            </div>
-            <div class="testimonial-card">
-                <div class="stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-                <p>"Komisinya transparan dan pencairannya sangat cepat. Cocok banget buat pemula yang baru mau mulai jadi affiliate."</p>
-                <div class="user">
-                    <strong>Siti Sarah</strong>
-                    <span>Mompreneur</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+        </section>
 
-<section id="faq" class="faq">
-    <div class="container">
-        <h2 class="section-title">Pertanyaan Umum</h2>
-        <div class="faq-list">
-            <details class="faq-item">
-                <summary>Apakah mendaftar di AffiliatePro gratis?</summary>
-                <p>Ya, pendaftaran 100% gratis tanpa biaya bulanan apa pun.</p>
-            </details>
-            <details class="faq-item">
-                <summary>Berapa lama proses pencairan komisi?</summary>
-                <p>Pencairan dilakukan setiap hari Jumat setiap minggunya dengan minimal saldo Rp 50.000.</p>
-            </details>
-            <details class="faq-item">
-                <summary>Platform apa saja yang didukung?</summary>
-                <p>Saat ini kami mendukung Shopee, Tokopedia, TikTok Shop, Lazada, dan Blibli.</p>
-            </details>
-        </div>
-    </div>
-</section>
-<div class="mobile-menu-btn" id="menu-toggle">
-    <i class="fas fa-bars"></i>
-</div>
-
-<section id="contact" class="contact">
-    <div class="container">
-        <h2 class="section-title">Butuh Bantuan?</h2>
-        <div class="contact-wrapper">
-            <div class="contact-info">
-                <h3>Hubungi Tim Support</h3>
-                <p>Kami siap membantu Anda memulai perjalanan afiliasi 24/7.</p>
-                <div class="info-item"><i class="fas fa-envelope"></i> support@affiliatepro.id</div>
-                <div class="info-item"><i class="fas fa-whatsapp"></i> +62 812-3456-7890</div>
-            </div>
-            <form class="contact-form">
-                <input type="text" placeholder="Nama Lengkap" required>
-                <input type="email" placeholder="Email Aktif" required>
-                <textarea placeholder="Pesan Anda" rows="4"></textarea>
-                <button type="submit" class="btn btn-primary">Kirim Pesan</button>
-            </form>
-        </div>
-    </div>
-</section>
-
-<footer class="main-footer">
-    <div class="container">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <div class="logo"><i class="fas fa-chart-line"></i> AffiliatePro</div>
-                <p>Platform optimasi pendapatan afiliasi nomor satu di Indonesia.</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-tiktok"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
+        <section id="platforms" class="platforms">
+            <div class="container">
+                <h2 class="section-title">Ekosistem Terintegrasi</h2>
+                <div class="platform-grid">
+                    <div class="platform-card">
+                        <div class="platform-icon"><i class="fas fa-shopping-bag fa-2x" style="color: #ee4d2d;"></i></div>
+                        <h3>Shopee Affiliate</h3>
+                        <p>Akses jutaan produk dengan komisi hingga 10%. Cocok untuk konten Review Produk.</p>
+                    </div>
+                    <div class="platform-card">
+                        <div class="platform-icon"><i class="fab fa-tiktok fa-2x" style="color: #000;"></i></div>
+                        <h3>TikTok Shop</h3>
+                        <p>Optimalkan traffic video pendek Anda dengan sistem affiliate berbasis keranjang kuning.</p>
+                    </div>
+                    <div class="platform-card">
+                        <div class="platform-icon"><i class="fas fa-store fa-2x" style="color: #03ac0e;"></i></div>
+                        <h3>Tokopedia Affiliate</h3>
+                        <p>Raih komisi dari brand-brand ternama dan Official Store dengan verifikasi yang mudah.</p>
+                    </div>
+                    <div class="platform-card">
+                        <div class="platform-icon"><i class="fas fa-globe fa-2x" style="color: #0f172a;"></i></div>
+                        <h3>Lazada & Lainnya</h3>
+                        <p>Perluas jangkauan pasar hingga Asia Tenggara dengan integrasi global kami.</p>
+                    </div>
                 </div>
             </div>
-            <div class="footer-links">
-                <h4>Platform</h4>
-                <ul>
-                    <li><a href="#">Shopee Affiliate</a></li>
-                    <li><a href="#">TikTok Shop</a></li>
-                    <li><a href="#">Tokopedia Academy</a></li>
-                </ul>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2 class="section-title">Fitur Cerdas untuk Affiliate</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3><i class="fas fa-bolt"></i> Real-time Analytics</h3>
+                        <p>Pantau setiap klik dan konversi tepat saat terjadi dengan dashboard grafik kami.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><i class="fas fa-link"></i> Deep Link Auto-Fix</h3>
+                        <p>Link rusak? Sistem kami otomatis memperbaiki link yang mati agar Anda tidak kehilangan komisi.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><i class="fas fa-wallet"></i> One-Click Payout</h3>
+                        <p>Satu dompet untuk semua platform. Tarik saldo dari berbagai marketplace sekaligus.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><i class="fas fa-mobile-alt"></i> Mobile Optimized</h3>
+                        <p>Dashboard sangat ringan dibuka melalui smartphone untuk kontrol bisnis di mana saja.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="testimonials">
+            <div class="container">
+                <h2 class="section-title">Apa Kata Mereka?</h2>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p>"Dulu pusing kelola link satu-satu, sekarang semua rapi dalam satu dashboard."</p>
+                        <div class="user"><strong>Andi Pratama</strong><span>Content Creator</span></div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p>"Komisinya transparan dan pencairannya sangat cepat. Cocok buat pemula."</p>
+                        <div class="user"><strong>Siti Sarah</strong><span>Mompreneur</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="faq">
+            <div class="container">
+                <h2 class="section-title">Pertanyaan Umum</h2>
+                <div class="faq-list">
+                    <details class="faq-item">
+                        <summary>Apakah mendaftar di AffiliatePro gratis?</summary>
+                        <p>Ya, pendaftaran 100% gratis tanpa biaya bulanan apa pun.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>Berapa lama proses pencairan komisi?</summary>
+                        <p>Pencairan dilakukan setiap hari Jumat setiap minggunya dengan minimal saldo Rp 50.000.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <h2 class="section-title">Butuh Bantuan?</h2>
+                <div class="contact-wrapper">
+                    <div class="contact-info">
+                        <h3>Hubungi Tim Support</h3>
+                        <p>Kami siap membantu Anda memulai perjalanan afiliasi 24/7.</p>
+                        <div class="info-item"><i class="fas fa-envelope"></i> support@affiliatepro.id</div>
+                        <div class="info-item"><i class="fas fa-whatsapp"></i> +62 812-3456-7890</div>
+                    </div>
+                    <form class="contact-form">
+                        <input type="text" placeholder="Nama Lengkap" required>
+                        <input type="email" placeholder="Email Aktif" required>
+                        <textarea placeholder="Pesan Anda" rows="4"></textarea>
+                        <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo"><i class="fas fa-chart-line"></i> AffiliatePro</div>
+                    <p>Platform optimasi pendapatan afiliasi nomor satu di Indonesia.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="#">Shopee Affiliate</a></li>
+                        <li><a href="#">TikTok Shop</a></li>
+                        <li><a href="#">Tokopedia Academy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 AffiliatePro. All rights reserved.</p>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 AffiliatePro. All rights reserved.</p>
-        </div>
-    </div>
-</footer>
-        </main>
+    </footer>
 
-    <script src="script.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
