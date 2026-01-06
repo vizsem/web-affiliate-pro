@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Kelola Produk Pro</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+
+    <style>
+        .admin-box { background: white; padding: 2rem; border-radius: 12px; max-width: 800px; margin: 2rem auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .bulk-card { background: #f0fdf4; border: 2px dashed #22c55e; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; text-align: center; }
+        .form-group { margin-bottom: 1rem; text-align: left; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; }
+        .product-list-admin { margin-top: 2rem; border-top: 2px solid #eee; padding-top: 1rem; }
+        .admin-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; background: #fafafa; margin-bottom: 5px; border-radius: 5px; }
+        .btn-danger { background: #dc2626; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
+        .btn-warning { background: #f59e0b; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; margin-top: 10px; font-weight: bold; }
+        #fileNameDisplay { color: #15803d; font-weight: bold; margin: 10px 0; }
+    </style>
+</head>
+<body style="background: #f1f5f9;">
+
+    <div class="container">
+        <div class="admin-box">
+            <h2><i class="fas fa-user-shield"></i> Admin Panel AffiliatePro</h2>
+            <p>Kelola katalog produk Shopee secara massal (Supabase Connected).</p>
+            <hr style="margin: 1.5rem 0;">
+
+            <div class="bulk-card">
+                <h4><i class="fas fa-file-upload"></i> Upload CSV Massal (Shopee Format)</h4>
+                <p style="font-size: 0.85rem; color: #4b5563;">Gunakan file CSV "Komisi Ekstra" dari Shopee.</p>
+                
+                <input type="file" id="csvFile" accept=".csv" style="display: none;">
+                <button onclick="document.getElementById('csvFile').click()" class="btn btn-outline" style="margin-top: 10px;">
+                    <i class="fas fa-search"></i> Pilih File CSV
+                </button>
+                
+                <div id="fileNameDisplay"></div>
+                
+                <button id="btnProcessCsv" class="btn btn-primary" style="display: none; width: 100%; margin-top: 10px;">
+                    <i class="fas fa-cloud-upload-alt"></i> Konfirmasi & Upload ke Database
+                </button>
+
+                <button onclick="resetKatalog()" class="btn-warning">
+                    <i class="fas fa-trash-sweep"></i> RESET SEMUA PRODUK (Kosongkan Database)
+                </button>
+            </div>
+
+            <form id="productForm">
+                <h4 style="margin-bottom: 1rem;"><i class="fas fa-plus-circle"></i> Tambah Produk Satuan</h4>
+                <div class="form-group">
+                    <label>Nama Produk</label>
+                    <input type="text" id="pName" placeholder="Nama produk..." required>
+                </div>
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label>Platform</label>
+                        <select id="pPlatform">
+                            <option value="Shopee">Shopee</option>
+                            <option value="Tokopedia">Tokopedia</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Komisi (%)</label>
+                        <input type="text" id="pComm" placeholder="Contoh: 1.5%" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Link Produk</label>
+                    <input type="url" id="pLink" placeholder="https://..." required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan Satuan</button>
+            </form>
+
+            <div class="product-list-admin">
+                <h4 style="margin-bottom: 1rem;">Daftar Produk Aktif:</h4>
+                <div id="currentList">Menghubungkan ke Supabase...</div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <a href="dashboard.html" class="btn btn-outline" style="display: block; text-align: center;">Kembali ke Dashboard Member</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // KONFIGURASI SUPABASE
+        const SB_URL = 'https://ujwcxzjuxoajqwcugjnw.supabase.co';
+        // Pastikan ini adalah Anon Public Key Anda
+        const SB_KEY = 'sb_publishable_djge60BEt4ek9WWwVW5nbw_xb9KRlcd'; 
+        
+        // Menggunakan nama variabel spClient untuk menghindari SyntaxError: Shadowing
+        const spClient = supabase.createClient(SB_URL, SB_KEY);
+
+        const productForm = document.getElementById('productForm');
+        const csvInput = document.getElementById('csvFile');
+        const btnProcessCsv = document.getElementById('btnProcessCsv');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+        // 1. Fetch Data dari Database
+        async function fetchProducts() {
+            const listDiv = document.getElementById('currentList');
+            const { data, error } = await spClient
+                .from('products')
+                .select('*')
+                .order('id', { ascending: false });
+
+            if (error) {
+                listDiv.innerHTML = "<span style='color:red'>Gagal memuat data: " + error.message + "</span>";
+                return;
+            }
+
+            listDiv.innerHTML = data.length === 0 ? "Katalog kosong." : data.map(p => `
+                <div class="admin-item">
+                    <div>
+                        <small style="color: #2563eb;">${p.platform}</small><br>
+                        <strong>${p.name}</strong> (${p.commission})
+                    </div>
+                    <button class="btn-danger" onclick="deleteItem(${p.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // 2. Handler Tambah Manual
+        productForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const { error } = await spClient.from('products').insert([{
+                name: document.getElementById('pName').value,
+                platform: document.getElementById('pPlatform').value,
+                commission: document.getElementById('pComm').value,
+                link: document.getElementById('pLink').value
+            }]);
+
+            if (error) alert("Gagal Simpan: " + error.message);
+            else {
+                alert("Berhasil Ditambahkan!");
+                productForm.reset();
+                fetchProducts();
+            }
+        });
+
+        // 3. Handler CSV
+        csvInput.addEventListener('change', function() {
+            if (this.files[0]) {
+                fileNameDisplay.innerText = "File Terpilih: " + this.files[0].name;
+                btnProcessCsv.style.display = "block";
+            }
+        });
+
+        btnProcessCsv.addEventListener('click', () => {
+            const file = csvInput.files[0];
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: async function(results) {
+                    // Mapping Kolom CSV Shopee ke Database
+                    const productsBatch = results.data.map(row => ({
+                        name: row["Nama Komisi Ekstra"],
+                        commission: row["Komisi hingga"],
+                        link: row["Link Komisi Ekstra"],
+                        platform: "Shopee"
+                    })).filter(p => p.name && p.link);
+
+                    if (confirm(`Upload ${productsBatch.length} produk ke database?`)) {
+                        const { error } = await spClient.from('products').insert(productsBatch);
+                        if (error) alert("Gagal Upload Massal: " + error.message);
+                        else {
+                            alert("Sukses! " + productsBatch.length + " produk berhasil diimport.");
+                            location.reload();
+                        }
+                    }
+                }
+            });
+        });
+
+        // 4. Hapus Item Tunggal
+        async function deleteItem(id) {
+            if (confirm("Hapus produk ini dari katalog?")) {
+                const { error } = await spClient.from('products').delete().eq('id', id);
+                if (error) alert("Gagal hapus: " + error.message);
+                else fetchProducts();
+            }
+        }
+
+        // 5. Reset Masal (Hapus Semua)
+        async function resetKatalog() {
+            if (confirm("⚠️ PERINGATAN! Ini akan menghapus SELURUH isi katalog. Lanjutkan?")) {
+                const { error } = await spClient.from('products').delete().neq('id', 0);
+                if (error) alert("Gagal Reset: " + error.message);
+                else {
+                    alert("Katalog telah dikosongkan.");
+                    fetchProducts();
+                }
+            }
+        }
+
+        // Jalankan fetch pertama kali
+        fetchProducts();
+    </script>
+</body>
+</html>
