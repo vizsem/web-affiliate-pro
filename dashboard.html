@@ -135,14 +135,26 @@
         }
 
         // 3. Fungsi Modal Generator
-        function openGenerator(pName, pLink) {
-            const modal = document.getElementById('modal-overlay');
-            const input = document.getElementById('dash-generated-url');
-            
-            if (!pLink || pLink === "undefined") {
-                alert("Maaf, link produk asli tidak ditemukan.");
-                return;
-            }
+      function openGenerator(pName, pLink) {
+    const modal = document.getElementById('modal-overlay');
+    const input = document.getElementById('dash-generated-url');
+    
+    if (!pLink || pLink === "undefined") {
+        alert("Maaf, link produk tidak tersedia.");
+        return;
+    }
+
+    document.getElementById('modal-title').innerText = pName;
+    
+    // Secara otomatis mengambil https://web-affiliate-pro2.vercel.app
+    const currentDomain = window.location.origin;
+    
+    // Membuat link yang mengarah ke folder /re/ di server Vercel Anda
+    const affiliateLink = `${currentDomain}/re/?dest=${encodeURIComponent(pLink)}`;
+    
+    input.value = affiliateLink;
+    modal.style.display = 'flex';
+}
 
             document.getElementById('modal-title').innerText = pName;
             
