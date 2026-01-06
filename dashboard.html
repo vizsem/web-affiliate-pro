@@ -5,47 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard AffiliatePro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css"> <style>
+    <link rel="stylesheet" href="style.css"> 
+    <style>
         /* CSS Khusus Dashboard */
         .dashboard-container {
             display: grid;
             grid-template-columns: 250px 1fr;
             min-height: 100vh;
         }
+
         .sidebar {
             background: var(--dark);
             color: white;
             padding: 2rem 1rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
+
         .sidebar-menu {
             list-style: none;
             margin-top: 2rem;
+            flex-grow: 1;
         }
+
         .sidebar-menu li {
-            padding: 1rem;
+            padding: 0.8rem 1rem;
             border-radius: 8px;
             transition: 0.3s;
             cursor: pointer;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+
         .sidebar-menu li.active, .sidebar-menu li:hover {
             background: var(--primary);
         }
+
         .main-content {
             padding: 2rem;
             background: #f1f5f9;
         }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        /* Product Grid */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1.5rem;
             margin-top: 2rem;
         }
+
         .product-card {
             background: white;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
         }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
         .product-img {
             width: 100%;
             height: 180px;
@@ -53,17 +105,45 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--primary);
         }
+
         .product-info {
             padding: 1.2rem;
         }
+
         .commission-badge {
             background: #dcfce7;
             color: #166534;
-            padding: 4px 8px;
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: bold;
+        }
+
+        /* Modal Generator */
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container { grid-template-columns: 1fr; }
+            .sidebar { display: none; } /* Mobile Menu can be added later */
         }
     </style>
 </head>
@@ -75,27 +155,59 @@
                 <li class="active"><i class="fas fa-home"></i> Dashboard</li>
                 <li><i class="fas fa-box"></i> Katalog Produk</li>
                 <li><i class="fas fa-wallet"></i> Komisi</li>
+                <li><i class="fas fa-link"></i> Link Saya</li>
                 <li><i class="fas fa-cog"></i> Pengaturan</li>
-                <li style="margin-top: auto;"><a href="index.html" style="color: white; text-decoration: none;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
+            <div style="padding: 1rem;">
+                <a href="index.html" style="color: #fda4af; text-decoration: none; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
         </aside>
 
         <main class="main-content">
-            <header style="display: flex; justify-content: space-between; align-items: center;">
-                <h2>Katalog Produk Afiliasi</h2>
-                <div class="user-profile">Halo, <strong>Affiliate Marketer</strong></div>
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div>
+                    <h2>Ringkasan Performa</h2>
+                    <p style="color: #64748b;">Selamat datang kembali, Marketer!</p>
+                </div>
+                <div class="user-profile">
+                    <i class="fas fa-user-circle fa-2x"></i>
+                </div>
             </header>
 
-            <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-img"><i class="fas fa-mobile-alt fa-3x"></i></div>
-                    <div class="product-info">
-                        <span class="commission-badge">Komisi 15%</span>
-                        <h4 style="margin: 10px 0;">Smartphone Pro Max X</h4>
-                        <p style="font-size: 0.9rem; color: #64748b;">Shopee • Stok: 50+</p>
-                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="generateLink()">Ambil Link</button>
-                    </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Klik</h3>
+                    <div class="value">1,284</div>
                 </div>
+                <div class="stat-card">
+                    <h3>Konversi</h3>
+                    <div class="value">42</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Estimasi Komisi</h3>
+                    <div class="value">Rp 850.000</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Saldo Cair</h3>
+                    <div class="value" style="color: var(--secondary);">Rp 2.100.000</div>
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 2rem 0;">
+
+            <h3>Katalog Produk Pilihan</h3>
+            <main class="main-content">
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+            <h2>Katalog Produk Resmi</h2>
+            <p style="color: #64748b;">Produk pilihan admin dengan komisi tertinggi hari ini.</p>
+        </div>
+    </header>
+
+    <div id="admin-product-list" class="product-grid"></div>
+</main>
 
                 <div class="product-card">
                     <div class="product-img"><i class="fas fa-laptop fa-3x"></i></div>
@@ -103,7 +215,7 @@
                         <span class="commission-badge">Komisi 10%</span>
                         <h4 style="margin: 10px 0;">Laptop Ultrabook Ultra</h4>
                         <p style="font-size: 0.9rem; color: #64748b;">Tokopedia • Stok: 20+</p>
-                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="generateLink()">Ambil Link</button>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="openGenerator('Laptop Ultrabook Ultra')">Ambil Link</button>
                     </div>
                 </div>
 
@@ -113,13 +225,130 @@
                         <span class="commission-badge">Komisi 20%</span>
                         <h4 style="margin: 10px 0;">Wireless Headphone Giga</h4>
                         <p style="font-size: 0.9rem; color: #64748b;">TikTok Shop • Stok: 100+</p>
-                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="generateLink()">Ambil Link</button>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="openGenerator('Wireless Headphone Giga')">Ambil Link</button>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <script src="script.js"></script>
+    <div id="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modal-title">Generate Link</h3>
+            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 1rem;">Link afiliasi khusus Anda siap digunakan.</p>
+            <input type="text" id="dash-generated-url" readonly style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 1rem;">
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary" style="flex: 1;" onclick="copyDashLink()">Salin Link</button>
+                <button class="btn btn-outline" style="flex: 1;" onclick="closeModal()">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openGenerator(pName) {
+            const modal = document.getElementById('modal-overlay');
+            const input = document.getElementById('dash-generated-url');
+            document.getElementById('modal-title').innerText = pName;
+            
+            // Simulasi generate link unik
+            input.value = `https://affpro.id/re/user99?item=${pName.replace(/\s+/g, '-').toLowerCase()}`;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').style.display = 'none';
+        }
+
+        function copyDashLink() {
+            const input = document.getElementById('dash-generated-url');
+            input.select();
+            navigator.clipboard.writeText(input.value);
+            alert("Link berhasil disalin!");
+            closeModal();
+        }
+    </script>
+    <script>
+    // SIMULASI DATABASE ADMIN
+    // Hanya admin yang bisa mengubah daftar ini di dalam kode/database
+    const officialProducts = [
+        {
+            id: 1,
+            name: "Pembersih Jamur Kaca Mobil / Waterspot Remover / Glass Reborn By Dohero",
+            platform: "Shopee",
+            commission: "21,5%",
+            stock: "Tersedia",
+            icon: "fa-mobile-alt",
+            link: "https://shopee.co.id/product/303440283/6780408583"
+        },
+        {
+            id: 2,
+            name: "Cuka Apel Gemeli Premium 500ml With Mother",
+            platform: "Shopee",
+            commission: "8%",
+            stock: "Terbatas",
+            icon: "fa-laptop",
+            link: "https://shopee.co.id/product/52174898/24514425386"
+        },
+        {
+            id: 3,
+            name: "Paket Cuci Motor I Kilap Premium - Shampoo Motor Mobil Hi-Foam Ph-Balanced, Sponge Cuci Kendaraan Motor Mobil, Drying Edgeless Microfiber, Microfiber Pengering, Sabun Cuci MobilSony WH-1000XM5 Headphone",
+            platform: "Shopee",
+            commission: "11,5%%",
+            stock: "Tersedia",
+            icon: "fa-headphones",
+            link: "https://tiktok.com/shop/contoh3"
+        },
+        {
+            id: 4,
+            name: "Zaharume Penghitam Body Permanen Trim Restorer /Dashboard/body motor motor Back to Black master",
+            platform: "Shopee",
+            commission: "20%",
+            stock: "tersedia",
+            icon: "fa-chair",
+            link: "https://shopee.co.id/product/314274292/5554902256"
+        }
+    ];
+
+    // Fungsi untuk menampilkan produk yang ditentukan Admin
+    function displayAdminProducts() {
+        const container = document.getElementById('admin-product-list');
+        container.innerHTML = ""; // Bersihkan tampilan
+
+        officialProducts.forEach(product => {
+            const card = `
+                <div class="product-card">
+                    <div class="product-img"><i class="fas ${product.icon} fa-3x"></i></div>
+                    <div class="product-info">
+                        <span class="commission-badge">Komisi ${product.commission}</span>
+                        <h4 style="margin: 10px 0;">${product.name}</h4>
+                        <p style="font-size: 0.9rem; color: #64748b;">${product.platform} • Stok: ${product.stock}</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" 
+                            onclick="openGenerator('${product.name}', '${product.link}')" 
+                            ${product.stock === 'Habis' ? 'disabled style="background:#cbd5e1"' : ''}>
+                            ${product.stock === 'Habis' ? 'Stok Habis' : 'Ambil Link'}
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+    }
+
+    // Jalankan saat halaman dibuka
+    displayAdminProducts();
+
+    // Fungsi Modal yang sudah kita buat sebelumnya (update sedikit)
+    function openGenerator(pName, pLink) {
+        const modal = document.getElementById('modal-overlay');
+        const input = document.getElementById('dash-generated-url');
+        document.getElementById('modal-title').innerText = pName;
+        
+        // Gabungkan ID User (misal USER99) dengan link produk dari admin
+        input.value = `https://affpro.id/re/USER99?dest=${encodeURIComponent(pLink)}`;
+        modal.style.display = 'flex';
+    }
+    
+    // ... (sertakan fungsi closeModal dan copyDashLink yang lama)
+</script>
 </body>
 </html>
